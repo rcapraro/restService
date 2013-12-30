@@ -57,6 +57,16 @@ public class Application {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);
+
+        AbstractApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
+        CustomerRepository repository = context.getBean(CustomerRepository.class);
+
+        // save a couple of customers
+        repository.save(new Customer("Jack", "Bauer"));
+        repository.save(new Customer("Chloe", "O'Brian"));
+        repository.save(new Customer("Kim", "Bauer"));
+        repository.save(new Customer("David", "Palmer"));
+        repository.save(new Customer("Michelle", "Dessler"));
     }
 
 }
