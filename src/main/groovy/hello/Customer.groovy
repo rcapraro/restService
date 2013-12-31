@@ -2,28 +2,40 @@ package hello
 
 import groovy.transform.ToString
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
-@Entity
+@Entity(name = "CUSTOMERS")
 @ToString
+/**
+ * Created by rcapraro on 30/12/2013.
+ */
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    long id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id
+
     String firstName
+
     String lastName
 
-    public Customer() {
+    String street
+
+    String city
+
+    String zipCode
+
+    String email
+
+    @OneToMany(mappedBy = "customer", targetEntity = Order.class, fetch = FetchType.EAGER)
+    Collection<Order> orders
+
+    Customer() {
     }
 
-    public Customer(String firstName, String lastName) {
+    Customer(String firstName, String lastName) {
         this.firstName = firstName
         this.lastName = lastName
     }
-
 }
 
