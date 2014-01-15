@@ -65,7 +65,22 @@ public class Application {
         CustomerRepository repository = context.getBean(CustomerRepository.class);
 
         // save a couple of customers
-        repository.save(new Customer("Jack", "Bauer"))
+        def builder = new ObjectGraphBuilder()
+        builder.classNameResolver = "hello.model"
+
+        repository.save(builder.customer(
+                firstName: 'Jack',
+                lastName: 'Bauer',
+                street: '415 Downing Street',
+                city: 'New York',
+                zipCode: '58745',
+                email: 'jack.bauer@cat.com'
+        )
+        {
+            order(totalPrice: 10.0, description: 'Aspirin')
+        }
+        )
+
         repository.save(new Customer("Chloe", "O'Brian"))
         repository.save(new Customer("Kim", "Bauer"))
         repository.save(new Customer("David", "Palmer"))
