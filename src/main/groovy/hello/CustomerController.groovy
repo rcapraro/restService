@@ -1,5 +1,6 @@
 package hello
 
+import hello.model.Customer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
@@ -25,6 +26,12 @@ public class CustomerController {
     @RequestMapping(value = "/customers", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<Customer> getAllCustomers() {
+        customerRepository.findAll()
+    }
+
+    @RequestMapping(value = "/customers", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Customer> findCustomers() {
         customerRepository.findAll()
     }
 }

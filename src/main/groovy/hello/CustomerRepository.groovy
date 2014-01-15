@@ -1,5 +1,6 @@
 package hello
 
+import hello.model.Customer
 import org.springframework.data.repository.CrudRepository
 
 /**
