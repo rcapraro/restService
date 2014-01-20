@@ -1,6 +1,5 @@
 package hello
 
-import hello.model.Customer
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
@@ -62,13 +61,25 @@ public class Application {
         SpringApplication.run(Application.class, args);
 
         AbstractApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
-        CustomerRepository repository = context.getBean(CustomerRepository.class);
+        CustomerRepository customerRepository = context.getBean(CustomerRepository.class);
+        ProductRepository productRepository = context.getBean(ProductRepository.class);
 
         // save a couple of customers
         def builder = new ObjectGraphBuilder()
         builder.classNameResolver = "hello.model"
 
-        repository.save(builder.customer(
+
+        def product1 = builder.product(name: 'Basic Optical', description: 'Microsoft mouse Basic optical', price: 10)
+        def product2 = builder.product(name: 'G400s', description: 'Logitech mouse G400s', price: 30)
+        def product3 = builder.product(name: 'Razer Deathadder', description: 'Razer Deathadder 2013', price: 60)
+        def product4 = builder.product(name: 'Razer Taipan', description: 'Razer Taipan ambidextrous mouse', price: 80)
+
+        productRepository.save(product1)
+        productRepository.save(product2)
+        productRepository.save(product3)
+        productRepository.save(product4)
+
+        def customer1 = builder.customer(
                 firstName: 'Jack',
                 lastName: 'Bauer',
                 street: '415 Downing Street',
@@ -76,15 +87,38 @@ public class Application {
                 zipCode: '58745',
                 email: 'jack.bauer@cat.com'
         )
-        {
-            order(totalPrice: 10.0, description: 'Aspirin')
-        }
-        )
+                {
+                    order(totalPrice: 40, description: 'Order of 04/01/2014', orderDate: new Date(), products: [product1, product2])
+                }
 
-        repository.save(new Customer("Chloe", "O'Brian"))
-        repository.save(new Customer("Kim", "Bauer"))
-        repository.save(new Customer("David", "Palmer"))
-        repository.save(new Customer("Michelle", "Dessler"))
+        def customer2 = builder.customer(
+                firstName: 'Michael',
+                lastName: 'Bauer',
+                street: '200 Bridge Avenue',
+                city: 'San Francisco',
+                zipCode: '23444',
+                email: 'michael.bauer@hotmail.com'
+        )
+                {
+                    order(totalPrice: 60, description: 'Order of 06/01/2014', orderDate: new Date(), products: [product3])
+                }
+
+        def customer3 = builder.customer(
+                firstName: 'John',
+                lastName: 'Stevenson',
+                street: '589 Hall Avenue',
+                city: 'Boston',
+                zipCode: '78542',
+                email: 'john_s80@yahoo.com'
+        )
+                {
+                    order(totalPrice: 90, description: 'Order of 09/01/2014', orderDate: new Date(), products: [product1, product4])
+                }
+
+        customerRepository.save(customer1)
+        customerRepository.save(customer2)
+        customerRepository.save(customer3)
+
     }
 
 }
